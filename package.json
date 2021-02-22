@@ -6,17 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/omarayman639/hamada-darwish-backend.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/omarayman639/hamada-darwish-backend/issues"
-  },
-  "homepage": "https://github.com/omarayman639/hamada-darwish-backend#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^5.22.3",
+    "sequelize-auto": "^0.5.3"
+  },
+  "devDependencies": {
+    "faker": "^5.4.0"
   }
 }
