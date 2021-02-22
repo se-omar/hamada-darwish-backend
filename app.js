@@ -1,9 +1,33 @@
 const express = require('express')
 const faker = require('faker')
+const cors = require('cors')
 const Sequelize = require("sequelize");
+const bodyParser = require("body-parser");
 const db = require("./database");
 const app = express()
 const port = 3000
+
+
+
+app.use(cors());
+
+
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(bodyParser.json());
+
+app.set("view engine", "handlebars");
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, authorization"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  next();
+});
 
 
 const usersRoute = require("./routes/usersRoute.js");

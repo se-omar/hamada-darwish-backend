@@ -17,4 +17,14 @@ const db = {
   products_categories: sequelize.import("./models/products_categories"),
 }
 
+db.categories.hasMany(db.products, {
+    foreignKey: "category_id"
+})
+db.products.belongsTo(db.categories)
+
+db.brands.hasMany(db.products, {
+    foreignKey: "brand_id"
+})
+db.products.belongsTo(db.brands)
+
 module.exports = db;
