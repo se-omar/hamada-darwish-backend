@@ -32,6 +32,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: true
     },
+    is_featured: {
+      type: 'BINARY(1)',
+      allowNull: true,
+      defaultValue: "0"
+    },
     image1: {
       type: DataTypes.STRING(255),
       allowNull: true

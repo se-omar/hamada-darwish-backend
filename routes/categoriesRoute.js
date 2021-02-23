@@ -9,4 +9,24 @@ router.get('/api/getAllCategories', async(req, res) => {
     })
 })
 
+router.post('/api/getCategoryProducts', async(req, res) => {
+    var categoryProducts = await db.products.findAll({
+        include: [
+            {
+                model: db.categories
+            },
+            {
+                model: db.brands
+            }
+        ],
+        where: {
+            category_id: req.body.Id
+        }
+    })
+
+    res.json({
+        categoryProducts
+    })
+})
+
 module.exports = router;

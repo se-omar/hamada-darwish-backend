@@ -8,15 +8,25 @@ router.use(bodyParser.urlencoded({
 }));
 router.use(bodyParser.json());
 
-router.get('/api/getAllProducts', async(req, res) => {
-    var products = await db.products.findAll({include: [{
-        model: db.categories,
-    },{
-        model: db.brands,
-    }]})
-    res.json({
-        products,
+router.get('/api/getAllFeaturedProducts', async(req, res) => {
+    var featuredProducts = await db.products.findAll({
+        include: [
+            {
+                model: db.categories
+            },
+            {
+                model: db.brands
+            }
+        ],
+        where: {
+            is_featured: "1"
+        }
     })
+
+    res.json({
+        featuredProducts
+    })
+
 })
 
 router.post('/api/getProductDetails', async(req, res) => {
@@ -38,5 +48,27 @@ router.post('/api/getProductDetails', async(req, res) => {
        productDetails
    })
 })
+
+router.post('/api/getCategoryAndBrandProducts', async(req, res) => {
+    var brandAndCategoryProducts = await db.products.findAll({
+        include: [
+            {
+                model: db.categories
+            },
+            {
+                model: db.brands
+            }
+        ],
+        where: {
+            brand_id: req.body.brand_id,
+            category_id: req.body.category_id
+        }
+    })
+
+    res.json({
+        brandAndCategoryProducts
+    })
+})
+
 
 module.exports = router;
