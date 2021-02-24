@@ -78,6 +78,22 @@ app.post('/api/populateProductsTable', (req, res) => {
   res.send('record created')
 })
 
+
+app.post('/api/populateProductsSizesTable',async (req, res) => {
+  var products = await db.products.findAll()
+  var sizes = await db.sizes.findAll()
+  for (let i = 0; i < products.length; i++) {
+    for(let j=0; j<5; j++){
+      db.products_sizes.create({
+        product_id: products[i].Id,
+        size_id: sizes[Math.floor(Math.random() * sizes.length)].Id
+      })
+    }
+   
+  }
+  res.send('records created')
+})
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })

@@ -13,8 +13,12 @@ const db = {
   products: sequelize.import("./models/products"),
   brands: sequelize.import("./models/brands"),
   categories: sequelize.import("./models/categories"),
+  sizes: sequelize.import("./models/sizes"),
   products_brands: sequelize.import("./models/products_brands"),
   products_categories: sequelize.import("./models/products_categories"),
+  products_colors: sequelize.import("./models/products_colors"),
+  products_sizes: sequelize.import("./models/products_sizes"),
+  
 }
 
 db.categories.hasMany(db.products, {

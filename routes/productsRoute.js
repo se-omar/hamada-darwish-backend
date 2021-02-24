@@ -30,6 +30,7 @@ router.get('/api/getAllFeaturedProducts', async(req, res) => {
 })
 
 router.post('/api/getProductDetails', async(req, res) => {
+    var sizesAr = []
    var productDetails = await db.products.findOne({
        include: [
            {
@@ -44,8 +45,23 @@ router.post('/api/getProductDetails', async(req, res) => {
        }
    })
 
+   var productSizes = await db.products_sizes.findAll({
+       where: {
+           product_id: req.body.Id
+       }
+   })
+
+   for (let i =0; i<productSizes.length; i++){
+    var sizeRow = await db.sizes.findOne({
+        where: {
+            Id: productSizes[i].size_id
+        }
+    })
+    sizesAr.push(sizeRow.name)
+   }
+
    res.json({
-       productDetails
+       productDetails, productSizes: sizesAr
    })
 })
 
