@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const db = require("./database");
 const app = express()
 const port = 3000
+var bcrypt = require('bcryptjs');
 
 
 
@@ -93,6 +94,23 @@ app.post('/api/populateProductsSizesTable',async (req, res) => {
   }
   res.send('records created')
 })
+
+// app.post('/api/changePassword',async (req, res) => {
+//       bcrypt.hash('eshta123', 10, async (err, hash) => {
+//         if (err) {
+//             return res.status(500).send(err);
+//         } else {
+//           var user = await db.users.findOne({
+//             where: {email: 'omaraymanadminemail@email.com'}
+//           })
+//           user.update({
+//             password: hash
+//           })
+//         }
+//         res.send(hash)
+//       })
+ 
+// })
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

@@ -1,6 +1,25 @@
 const express = require('express');  
 const router = express.Router(); 
 const db = require('../database')
+const multer = require("multer");
+const path = require('path')
+
+
+
+var imagedir = path.join(__dirname.substr(0, __dirname.length - 6), "/all-uploads/");
+router.use(express.static(imagedir));
+
+
+var storage = multer.diskStorage({
+    destination: "./all-uploads/brands-images",
+    filename: function (req, file, cb) {
+      cb(null, file.originalname.substr(0, file.originalname.length-4) + Date.now() + ".jpg");
+    },
+  });
+  const upload = multer({
+    storage: storage,
+  });
+
 
 router.get('/api/getAllBrands', async(req, res) => {
     var brands = await db.brands.findAll()
@@ -56,5 +75,21 @@ router.post('/api/getBrandDetailsAndProducts', async(req, res) => {
         brandDetails, brandProducts
     })
  })
+
+
+ router.post('/api/addBrand', upload.single("brandImage"), async(req, res) => {
+    console.log("The body is: ", req.body);
+    console.log('the image is:', req.file)
+    var brand = await db.brands.create({
+        name: req.body.name,
+        description: req.body.description,
+        image: 'brand-images/' + req.file.filename
+    })
+    res.json({
+        message: 'brand created successfully',
+        brand 
+    })
+})
+
 
 module.exports = router;

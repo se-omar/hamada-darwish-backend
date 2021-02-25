@@ -29,4 +29,15 @@ router.post('/api/getCategoryProducts', async(req, res) => {
     })
 })
 
+router.post('/api/addCat', async(req, res) => {
+    var cat = await db.categories.create({
+        name: req.body.name,
+        description: req.body.description,
+    })
+    res.json({
+        message: 'brand created successfully',
+        cat 
+    })
+})
+
 module.exports = router;

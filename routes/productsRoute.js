@@ -2,11 +2,29 @@ const express = require('express');
 const router = express.Router(); 
 const db = require('../database')
 const bodyParser = require("body-parser");
+const multer = require("multer");
+const path = require('path')
 
 router.use(bodyParser.urlencoded({
     extended: false
 }));
 router.use(bodyParser.json());
+
+var imagedir = path.join(__dirname.substr(0, __dirname.length - 6), "/all-uploads/");
+router.use(express.static(imagedir));
+
+
+var storage = multer.diskStorage({
+    destination: "./all-uploads/products-images",
+    filename: function (req, file, cb) {
+      cb(null, file.originalname + Date.now() + ".jpg");
+    },
+  });
+  const upload = multer({
+    storage: storage,
+  });
+
+
 
 router.get('/api/getAllFeaturedProducts', async(req, res) => {
     var featuredProducts = await db.products.findAll({
@@ -85,6 +103,7 @@ router.post('/api/getCategoryAndBrandProducts', async(req, res) => {
         brandAndCategoryProducts
     })
 })
+
 
 
 module.exports = router;
