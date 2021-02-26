@@ -24,7 +24,23 @@ var storage = multer.diskStorage({
     storage: storage,
   });
 
+  router.get('/api/getAllProducts', async(req, res) => {
+    var allProducts = await db.products.findAll({
+        include: [
+            {
+                model: db.categories
+            },
+            {
+                model: db.brands
+            }
+        ],
+    })
 
+    res.json({
+        allProducts
+    })
+
+})
 
 router.get('/api/getAllFeaturedProducts', async(req, res) => {
     var featuredProducts = await db.products.findAll({
@@ -104,6 +120,63 @@ router.post('/api/getCategoryAndBrandProducts', async(req, res) => {
     })
 })
 
+router.post("/api/addProduct", upload.array("images", 12), async (req, res, next) => {
+    console.log(req.files)
+    var product = await db.products.create({
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        material: req.body.material,
+        is_featured: req.body.isFeatured,
+        category_id: req.body.category_id,
+        brand_id: req.body.brand_id,
+        image1:req.files[0] ? 'products-images/' + req.files[0].filename : '',
+        image2:req.files[1] ? 'products-images/' + req.files[1].filename : '',
+        image3:req.files[2] ? 'products-images/' + req.files[2].filename : '',
+        image4:req.files[3] ? 'products-images/' + req.files[3].filename : '',
+        image5:req.files[4] ? 'products-images/' + req.files[4].filename : '',
+    })
+    res.json({
+        message: 'product created',
+        product
+    })
+})
+
+router.post("/api/deleteProduct", async (req, res) => {
+    var product = await db.products.findOne({
+        where: {
+            Id: req.body.Id
+        }
+    })
+    await product.destroy()
+    res.json({
+        message: 'product deleted',
+    })
+})
+
+router.post("/api/editProduct",upload.array("images", 12), async (req, res) => {
+    console.log(req.body)
+    var product = await db.products.findByPk(req.body.Id)
+
+     product.update({
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        material: req.body.material,
+        is_featured: req.body.isFeatured,
+        category_id: req.body.category_id,
+        brand_id: req.body.brand_id,
+        image1:req.files[0] ? 'products-images/' + req.files[0].filename : product.image1,
+        image2:req.files[1] ? 'products-images/' + req.files[1].filename : product.image2,
+        image3:req.files[2] ? 'products-images/' + req.files[2].filename : product.image3,
+        image4:req.files[3] ? 'products-images/' + req.files[3].filename : product.image4,
+        image5:req.files[4] ? 'products-images/' + req.files[4].filename : product.image5,
+    })
+    res.json({
+        message: 'product updated',
+        product
+    })
+})
 
 
 module.exports = router;

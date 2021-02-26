@@ -28,6 +28,14 @@ router.get('/api/getAllBrands', async(req, res) => {
     })
 })
 
+router.post('/api/getBrandDetails', async(req, res) => {
+    var brand = await db.brands.findByPk(req.body.Id)
+    res.json({
+        message: 'brand aquired',
+        brand
+    })
+})
+
 
 router.post('/api/getBrandProducts', async(req, res) => {
     var brandProducts = await db.products.findAll({
@@ -91,5 +99,26 @@ router.post('/api/getBrandDetailsAndProducts', async(req, res) => {
     })
 })
 
+
+router.post('/api/deleteBrand', async(req, res) => {
+  var brand = await db.brands.findByPk(req.body.Id)
+  await brand.destroy()
+    res.json({
+        message: 'brand deleted successfully'
+    })
+ })
+
+ router.post('/api/editBrand', upload.single("brandImage"), async(req, res) => {
+     var brand = await db.brands.findByPk(req.body.Id)
+    brand.update({
+        name: req.body.name,
+        description: req.body.description,
+        image:req.file ? 'brand-images/' + req.file.filename : brand.image
+    })
+    res.json({
+        message: 'brand created successfully',
+        brand 
+    })
+})
 
 module.exports = router;
