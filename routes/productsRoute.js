@@ -178,5 +178,26 @@ router.post("/api/editProduct",upload.array("images", 12), async (req, res) => {
     })
 })
 
+router.post("/api/addToFeatured", async (req, res) => {
+    var product = await db.products.findByPk(req.body.Id)
+    product.update({
+        is_featured: 1
+    })
+
+    res.json({
+        message: 'product added'
+    })
+})
+
+router.post("/api/removeFromFeatured", async (req, res) => {
+    var product = await db.products.findByPk(req.body.Id)
+    product.update({
+        is_featured: 0
+    })
+
+    res.json({
+        message: 'product removed'
+    })
+})
 
 module.exports = router;
