@@ -102,6 +102,11 @@ router.post('/api/getBrandDetailsAndProducts', async(req, res) => {
 
 router.post('/api/deleteBrand', async(req, res) => {
   var brand = await db.brands.findByPk(req.body.Id)
+  await db.products.destroy({
+      where: {
+          brand_id: req.body.Id
+      }
+  })
   await brand.destroy()
     res.json({
         message: 'brand deleted successfully'
@@ -113,7 +118,7 @@ router.post('/api/deleteBrand', async(req, res) => {
     brand.update({
         name: req.body.name,
         description: req.body.description,
-        image:req.file ? 'brand-images/' + req.file.filename : brand.image
+        image:req.file ? 'brands-images/' + req.file.filename : brand.image
     })
     res.json({
         message: 'brand created successfully',

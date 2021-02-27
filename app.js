@@ -49,6 +49,7 @@ const productsBrandsRoute = require("./routes/productsBrandsRoute.js");
 app.use(productsBrandsRoute);
 
 const productsCategoriesRoute = require("./routes/productsCategoriesRoute.js");
+const { where } = require('sequelize');
 app.use(productsCategoriesRoute);
 
 
@@ -77,6 +78,27 @@ app.post('/api/populateProductsTable', (req, res) => {
     })
   }
   res.send('record created')
+})
+
+app.post('/api/updateProductsImages',async (req, res) => {
+
+  db.products.update({
+    image2: 'products-images/trousers.jpg',
+    image3: 'products-images/trousers.jpg',
+    image4: 'products-images/trousers.jpg',
+    image1: 'products-images/trousers.jpg',
+    image5: 'products-images/trousers.jpg',
+  },{
+    where: {
+      category_id: 8
+    }
+  }).then(abc => {
+    res.json({
+      message: 'updated'
+    })
+  })
+
+
 })
 
 

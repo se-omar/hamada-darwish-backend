@@ -70,6 +70,11 @@ router.post('/api/getCatDetails', async(req, res) => {
 
 router.post('/api/deleteCat', async(req, res) => {
     var category = await db.categories.findByPk(req.body.Id)
+    await db.products.destroy({
+        where: {
+            category_id: req.body.Id
+        }
+    })
     await category.destroy()
       res.json({
           message: 'category deleted successfully'
