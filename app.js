@@ -48,6 +48,9 @@ app.use(categoriesRoute);
 const productsBrandsRoute = require("./routes/productsBrandsRoute.js");
 app.use(productsBrandsRoute);
 
+const checkoutRoute = require("./routes/checkoutRoute.js");
+app.use(checkoutRoute);
+
 const productsCategoriesRoute = require("./routes/productsCategoriesRoute.js");
 const { where } = require('sequelize');
 app.use(productsCategoriesRoute);

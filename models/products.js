@@ -25,7 +25,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     price: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.DECIMAL,
       allowNull: true
     },
     material: {
@@ -33,9 +33,9 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     },
     is_featured: {
-      type: 'BINARY(1)',
+      type: DataTypes.INTEGER(1),
       allowNull: true,
-      defaultValue: "0"
+      defaultValue: 0
     },
     image1: {
       type: DataTypes.STRING(255),
