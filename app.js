@@ -51,6 +51,9 @@ app.use(productsBrandsRoute);
 const checkoutRoute = require("./routes/checkoutRoute.js");
 app.use(checkoutRoute);
 
+const homeSliderRoute = require("./routes/homeSliderRoute.js");
+app.use(homeSliderRoute);
+
 const productsCategoriesRoute = require("./routes/productsCategoriesRoute.js");
 const { where } = require('sequelize');
 app.use(productsCategoriesRoute);

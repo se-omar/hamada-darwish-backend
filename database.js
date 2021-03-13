@@ -18,6 +18,7 @@ const db = {
   products_categories: sequelize.import("./models/products_categories"),
   products_colors: sequelize.import("./models/products_colors"),
   products_sizes: sequelize.import("./models/products_sizes"),
+  home_slider: sequelize.import("./models/home_slider"),
   
 }
 
