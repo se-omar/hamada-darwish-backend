@@ -7,6 +7,7 @@ let crypto = require("crypto");
 const orderid = require('order-id')('eshta123');
 const nodemailer = require('nodemailer')
 const ejs = require('ejs');
+const host = 'http://localhost:3000'
 
 router.post('/api/generateKashierOrderHash', async(req, res) => {
     const orderId = orderid.generate();
@@ -53,31 +54,20 @@ router.post('/api/placeCashOrder', async(req, res) => {
     var cartProducts = JSON.parse(req.body.cartProducts)
     var orderProducts = []
     var orderTotalPrice = 0
+    var shipping = 20
     console.log(cartProducts)
     for(let i =0; i<cartProducts.length; i++){
         var product = await db.products.findByPk(cartProducts[i].Id)
+        product.quantity = cartProducts[i].quantity
+        product.size = cartProducts[i].size
         orderProducts.push(product)
         orderTotalPrice += parseFloat(product.price) * cartProducts[i].quantity
     }
-    const html =  ejs.render(
-        `<h1>A new order was made</h1>
-        <h4 style="display: inline; margin-right: 30px">full name: <%= firstName + ' ' + lastName %></h4>
-        <h4 style="display: inline; margin-right: 30px">email: <%= email %></h4>
-        <h4 style="display: inline; margin-right: 30px">mobile: <%= mobile %></h4>
-        <h4 style="display: inline; margin-right: 30px">street name: <%= streetName %></h4>
-        <h4 style="display: inline; margin-right: 30px">building: <%= building %></h4>
-        <h4 style="display: inline; margin-right: 30px">floor: <%= floor %></h4>
-        <h4 style="display: inline; margin-right: 30px">apartment: <%= apartment %></h4>
-        <h4 style="display: inline; margin-right: 30px">region: <%= region %></h4>
-        <% for(let j=0; j<orderProducts.length; j++){%>
-            <h4>product name: <%= orderProducts[j].name %></h4>
-            <h4>product price: <%= orderProducts[j].price %></h4>
-            <img src="'http://localhost:3000/' + <%= orderProducts[j].image1 %>">
-            <h4>product quantity: <%= cartProducts[j].quantity %></h4>
-            <h4>size: <%= cartProducts[j].size %></h4>
-            <% } %>`,
-            {   orderProducts: orderProducts,
-                cartProducts: cartProducts,
+    const html = await ejs.renderFile(
+                'ejs/nodemailer-html.ejs',
+            {   orderProducts,
+                cartProducts,
+                orderTotalPrice,
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 email: req.body.email,
@@ -86,9 +76,22 @@ router.post('/api/placeCashOrder', async(req, res) => {
                 building: req.body.building,
                 floor: req.body.floor,
                 apartment: req.body.apartment,
-                region: req.body.region
+                region: req.body.region,
+                orderNotes: req.body.orderNotes,
+                shipping
             }
     )
+
+    const attachments = []
+    for(let i =0; i<orderProducts.length; i++){
+        var attachment = {
+            filename: `${'product' + i + '.jpg'}`,
+            path: `${host + '/' + orderProducts[i].image1}`,
+            cid: `${'image' + i}`
+        }
+        attachments.push(attachment)
+    }
+
     let transporter = nodemailer.createTransport({
         service: "gmail",
         secure: false, // true for 465, false for other ports
@@ -103,10 +106,11 @@ router.post('/api/placeCashOrder', async(req, res) => {
 
     let mailOptions = {
         from: 'store name', // sender address
-        to: req.body.email, // list of receivers
+        to: 'miroayman639@gmail.com', // list of receivers
         subject: "order was made", // Subject line
         text: "Please activate from here", // plain text body
-        html: html
+        html: html,
+        attachments: attachments
     };
 
     transporter.sendMail(mailOptions, function (err) {

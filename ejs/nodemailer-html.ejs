@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <style>
+            table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 60%;
+}
+img {
+    max-width: 60%;
+    height: auto;
+    display: block;
+}
+
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+  max-width: 30px;
+  max-height: 30px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+        </style>
+    </head>
+    <body>
+            <h1>A new order was made</h1>
+            <p ><span style="font-weight: 900">full name: </span><%= firstName + ' ' + lastName %></p>
+            <p ><span style="font-weight: 900">email: </span><%= email %></p>
+            <p ><span style="font-weight: 900">mobile: </span><%= mobile %></p>
+            <p ><span style="font-weight: 900">street name: </span><%= streetName %></p>
+            <p ><span style="font-weight: 900">building: </span><%= building %></p>
+            <p ><span style="font-weight: 900">floor: </span><%= floor %></p>
+            <p ><span style="font-weight: 900">apartment: </span><%= apartment %></p>
+            <p ><span style="font-weight: 900">region: </span><%= region %></p>
+            <p ><span style="font-weight: 900">order notes </span><%= orderNotes %></p>
+
+            <table>
+                <tr>
+                  <th>product name</th>
+                  <th>product price</th>
+                  <th>quantity</th>
+                  <th>size</th>
+                  <th>image</th>
+                  <th>total</th>
+                </tr>
+                    <% for(let j=0; j<orderProducts.length; j++){%>
+                            <tr>
+                            <td><%= orderProducts[j].name %></td>
+                            <td><%= orderProducts[j].price + ' EGP' %></td>
+                            <td><%= orderProducts[j].quantity %></td>
+                            <td><%= orderProducts[j].size %></td>
+                            <td><img src="<%= 'cid:image' + j %>"></td>
+                            <td><%= orderProducts[j].price * orderProducts[j].quantity + shipping + ' EGP' %></td>
+                            </tr>
+                        <% } %>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>shipping</td>
+                            <td><%= shipping + ' EGP' %></td>
+                            <td><%= orderTotalPrice + shipping + ' EGP' %></td>
+                        </tr>
+            </table>
+    </body>
+
+</html>
