@@ -91,7 +91,7 @@ router.post('/api/getBrandDetailsAndProducts', async(req, res) => {
     var brand = await db.brands.create({
         name: req.body.name,
         description: req.body.description,
-        image: 'brand-images/' + req.file.filename
+        image: 'brands-images/' + req.file.filename
     })
     res.json({
         message: 'brand created successfully',
